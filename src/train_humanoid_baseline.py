@@ -12,7 +12,14 @@ BATCH_SIZE = 64
 EPOCHS = 5
 LR = 1e-3
 EVAL_SIZE = 100
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+if torch.cuda.is_available():
+    DEVICE = 'cuda'
+elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+    DEVICE = 'mps'
+else:
+    DEVICE = 'cpu'
+    
 MODEL_PATH = "bc_rnn_humanoid.pth"
 OPT_PATH = "bc_rnn_humanoid_opt.pth"
 

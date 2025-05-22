@@ -36,7 +36,9 @@ def rollout_trajectory(model, env, max_steps=1000, device="cpu"):
             mu, std, hidden = model(obs_tensor, hidden)
             # divide std by 3 to get a narrower/taller normal distr.
             # (make model take actions closer to mean)
-            dist = Independent(Normal(mu, std / 3), 1)
+            # TODO: change this for other models / for different experiments
+            std = torch.clamp(std / 3, min=1e-4)
+            dist = Independent(Normal(mu, std), 1)
             # sample action and clip it to stay in the bounds of the env action space
             action = dist.sample()[0, 0].cpu().numpy()
             action = np.clip(action, env.action_space.low, env.action_space.high)
@@ -147,18 +149,19 @@ def display_videos(frames_left, frames_right, label_left="Model 1", label_right=
         clock.tick(fps)
 
     # Wait for user input
-    print("Press 0 (left) or 1 (right) to indicate which trajectory you prefer.")
+    print("Press 1 (left) or 2 (right) to indicate which trajectory you prefer.")
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_0:
-                    pygame.quit()
-                    return 0
-                elif event.key == pygame.K_1:
+                if event.key == pygame.K_1:
                     pygame.quit()
                     return 1
+                elif event.key == pygame.K_2:
+                    pygame.quit()
+                    return 2
 
 
+# TODO: make sure this is correct
 def main(args):
     if not args.save_path.endswith(".pkl"):
         raise ValueError("save-path must end in .pkl for pickle serialization.")
@@ -172,6 +175,7 @@ def main(args):
                                    args.model_class, args.model_class,
                                    device=args.device)
 
+    # if we're resuming, load in the past preferences first
     if os.path.exists(args.save_path) and args.resume:
         with open(args.save_path, "rb") as f:
             preferences = pickle.load(f)
@@ -196,9 +200,9 @@ def main(args):
                                 label_left=left_label, label_right=right_label)
 
         # Determine which trajectory is model_1
-        chosen_traj = left_traj if choice == 0 else right_traj
-        rejected_traj = right_traj if choice == 0 else left_traj
-        chosen_is_model1 = (choice == 0 and left_is_model1) or (choice == 1 and not left_is_model1)
+        chosen_traj = left_traj if choice == 1 else right_traj
+        rejected_traj = right_traj if choice == 1 else left_traj
+        chosen_is_model1 = (choice == 1 and left_is_model1) or (choice == 2 and not left_is_model1)
 
         preference = {
             "chosen_obs": chosen_traj["observations"],
@@ -210,8 +214,8 @@ def main(args):
                 "env": args.env_name,
                 "left_model": left_label,
                 "right_model": right_label,
-                "preferred_side": "left" if choice == 0 else "right",
-                "preferred_model": left_label if choice == 0 else right_label,
+                "preferred_side": "left" if choice == 1 else "right",
+                "preferred_model": left_label if choice == 1 else right_label,
                 "chosen_is_model1": chosen_is_model1
             }
         }
@@ -220,7 +224,7 @@ def main(args):
     os.makedirs(os.path.dirname(args.save_path), exist_ok=True)
     with open(args.save_path, "wb") as f:
         pickle.dump(preferences, f)
-        print(preferences)
+
 
 
 if __name__ == "__main__":

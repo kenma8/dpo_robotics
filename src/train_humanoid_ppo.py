@@ -35,8 +35,7 @@ model = PPO(
 
 total_timesteps = 5_000_000
 model.learn(
-    total_timesteps=total_timesteps, 
-    tensorboard_log=f"./runs/ppo_humanoid/{timestamp}",
+    total_timesteps=total_timesteps,
     callback=WandbCallback(
         gradient_save_freq=1000,
         model_save_path=f"./runs/ppo_humanoid/{timestamp}",

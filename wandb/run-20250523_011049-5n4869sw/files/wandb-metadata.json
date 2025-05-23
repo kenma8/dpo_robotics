@@ -1,0 +1,44 @@
+{
+  "os": "macOS-15.4.1-arm64-arm-64bit",
+  "python": "CPython 3.11.11",
+  "startedAt": "2025-05-23T08:10:49.600376Z",
+  "program": "/Users/kenma/Documents/dpo_robotics/src/train_humanoid_ppo.py",
+  "codePath": "src/train_humanoid_ppo.py",
+  "git": {
+    "remote": "https://github.com/kenma8/dpo_robotics.git",
+    "commit": "349a67a55c7753150e44e77f1c82341b3d2a84c3"
+  },
+  "email": "kwright.m@gmail.com",
+  "root": "/Users/kenma/Documents/dpo_robotics",
+  "host": "Kenneths-MacBook-Pro.local",
+  "executable": "/opt/miniconda3/envs/cs224r/bin/python",
+  "codePathLocal": "src/train_humanoid_ppo.py",
+  "cpu_count": 10,
+  "cpu_count_logical": 10,
+  "disk": {
+    "/": {
+      "total": "994662584320",
+      "used": "232194744320"
+    },
+    "/System/Volumes/Data": {
+      "total": "994662584320",
+      "used": "232194744320"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "cpu": {
+    "count": 10,
+    "countLogical": 10
+  },
+  "apple": {
+    "name": "Apple M4",
+    "ecpuCores": 6,
+    "pcpuCores": 4,
+    "gpuCores": 10,
+    "memoryGb": 16,
+    "swapTotalBytes": "10737418240",
+    "ramTotalBytes": "17179869184"
+  }
+}

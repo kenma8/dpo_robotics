@@ -1,0 +1,40 @@
+Using cpu device
+/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/policies.py:486: UserWarning: As shared layers in the mlp_extractor are removed since SB3 v1.8.0, you should now pass directly a dictionary and not a list (net_arch=dict(pi=..., vf=...) instead of net_arch=[dict(pi=..., vf=...)])
+  warnings.warn(
+Logging to ./runs/ppo_humanoid/20250523-010819/PPO_1
+---------------------------------
+| rollout/           |          |
+|    ep_len_mean     | 21.6     |
+|    ep_rew_mean     | 96.4     |
+| time/              |          |
+|    fps             | 6085     |
+|    iterations      | 1        |
+|    time_elapsed    | 10       |
+|    total_timesteps | 65536    |
+---------------------------------
+Traceback (most recent call last):
+  File "/Users/kenma/Documents/dpo_robotics/src/train_humanoid_ppo.py", line 47, in <module>
+    model.learn(
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/ppo/ppo.py", line 311, in learn
+    return super().learn(
+           ^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/on_policy_algorithm.py", line 337, in learn
+    self.train()
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/ppo/ppo.py", line 278, in train
+    self.policy.optimizer.step()
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/optim/optimizer.py", line 485, in wrapper
+    out = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/optim/optimizer.py", line 79, in _use_grad
+    ret = func(self, *args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/optim/adam.py", line 246, in step
+    adam(
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/optim/optimizer.py", line 147, in maybe_fallback
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/optim/adam.py", line 933, in adam
+    func(
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/optim/adam.py", line 527, in _single_tensor_adam
+    param.addcdiv_(exp_avg, denom, value=-step_size)
+KeyboardInterrupt

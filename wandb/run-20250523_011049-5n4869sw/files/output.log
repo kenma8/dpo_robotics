@@ -1,0 +1,14 @@
+Using cpu device
+/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/policies.py:486: UserWarning: As shared layers in the mlp_extractor are removed since SB3 v1.8.0, you should now pass directly a dictionary and not a list (net_arch=dict(pi=..., vf=...) instead of net_arch=[dict(pi=..., vf=...)])
+  warnings.warn(
+Logging to ./runs/ppo_humanoid/20250523-011049/PPO_1
+---------------------------------
+| rollout/           |          |
+|    ep_len_mean     | 23.3     |
+|    ep_rew_mean     | 104      |
+| time/              |          |
+|    fps             | 5286     |
+|    iterations      | 1        |
+|    time_elapsed    | 12       |
+|    total_timesteps | 65536    |
+---------------------------------

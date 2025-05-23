@@ -10,22 +10,49 @@ from torch.distributions import Normal, Independent
 
 from train_humanoid_baseline import BCPolicyRNN
 
+TRAIN_SIZE = 250
+
 def load_preferences(preferences_path):
     """Load preferences dataset from pickle file"""
     with open(preferences_path, "rb") as f:
         preferences = pickle.load(f)
     return preferences
 
-def prepare_batch(preferences, batch_indices, device):
-    """Prepare a batch of preferences for training"""
-    batch_chosen_obs = torch.tensor(np.stack([preferences[i]["chosen_obs"] for i in batch_indices]), 
-                                  dtype=torch.float32, device=device)
-    batch_chosen_act = torch.tensor(np.stack([preferences[i]["chosen_act"] for i in batch_indices]), 
-                                  dtype=torch.float32, device=device)
-    batch_rejected_obs = torch.tensor(np.stack([preferences[i]["rejected_obs"] for i in batch_indices]), 
-                                    dtype=torch.float32, device=device)
-    batch_rejected_act = torch.tensor(np.stack([preferences[i]["rejected_act"] for i in batch_indices]), 
-                                    dtype=torch.float32, device=device)
+def prepare_batch(preferences, batch_indices, device, seq_len=32):
+    """
+    Prepare a batch of preferences for training by sampling fixed-length segments
+    from each trajectory
+    """
+    batch_chosen_obs = []
+    batch_chosen_act = []
+    batch_rejected_obs = []
+    batch_rejected_act = []
+    
+    for i in batch_indices:
+        # Get trajectory lengths
+        chosen_len = len(preferences[i]["chosen_obs"])
+        rejected_len = len(preferences[i]["rejected_obs"])
+        
+        # Sample start indices ensuring we have enough steps for seq_len
+        chosen_start = np.random.randint(0, chosen_len - seq_len + 1)
+        rejected_start = np.random.randint(0, rejected_len - seq_len + 1)
+        
+        # Extract segments
+        chosen_obs = preferences[i]["chosen_obs"][chosen_start:chosen_start + seq_len]
+        chosen_act = preferences[i]["chosen_act"][chosen_start:chosen_start + seq_len]
+        rejected_obs = preferences[i]["rejected_obs"][rejected_start:rejected_start + seq_len]
+        rejected_act = preferences[i]["rejected_act"][rejected_start:rejected_start + seq_len]
+        
+        batch_chosen_obs.append(chosen_obs)
+        batch_chosen_act.append(chosen_act)
+        batch_rejected_obs.append(rejected_obs)
+        batch_rejected_act.append(rejected_act)
+    
+    # Stack into tensors
+    batch_chosen_obs = torch.tensor(np.stack(batch_chosen_obs), dtype=torch.float32, device=device)
+    batch_chosen_act = torch.tensor(np.stack(batch_chosen_act), dtype=torch.float32, device=device)
+    batch_rejected_obs = torch.tensor(np.stack(batch_rejected_obs), dtype=torch.float32, device=device)
+    batch_rejected_act = torch.tensor(np.stack(batch_rejected_act), dtype=torch.float32, device=device)
     
     return batch_chosen_obs, batch_chosen_act, batch_rejected_obs, batch_rejected_act
 
@@ -35,17 +62,9 @@ def get_sequence_log_probs(policy, obs_seq, act_seq):
     dist = Independent(Normal(mu, std), 1)  # Make independent over action dimensions
     return dist.log_prob(act_seq)  # (batch_size, seq_len)
 
-def dpo_loss(policy, chosen_obs, chosen_act, rejected_obs, rejected_act, beta=0.1):
+def dpo_loss(policy, old_policy, chosen_obs, chosen_act, rejected_obs, rejected_act, beta=0.1, kl_coef=0.1):
     """
-    Compute DPO loss for a batch of preferences
-    
-    Args:
-        policy: BCPolicyRNN instance
-        chosen_obs: Observations from chosen trajectories [batch_size, seq_len, obs_dim]
-        chosen_act: Actions from chosen trajectories [batch_size, seq_len, act_dim]
-        rejected_obs: Observations from rejected trajectories [batch_size, seq_len, obs_dim]
-        rejected_act: Actions from rejected trajectories [batch_size, seq_len, act_dim]
-        beta: Temperature parameter for DPO loss
+    Compute DPO loss with KL regularization
     """
     # Get log probs for chosen and rejected trajectories
     chosen_log_probs = get_sequence_log_probs(policy, chosen_obs, chosen_act)
@@ -56,13 +75,19 @@ def dpo_loss(policy, chosen_obs, chosen_act, rejected_obs, rejected_act, beta=0.
     rejected_log_probs = rejected_log_probs.sum(dim=1)  # [batch_size]
     
     # Compute DPO loss
-    loss = -torch.mean(
+    dpo = -torch.mean(
         torch.log(
             torch.sigmoid(beta * (chosen_log_probs - rejected_log_probs))
         )
     )
     
-    return loss
+    # Add KL penalty
+    with torch.no_grad():
+        old_mu, old_std, _ = old_policy(chosen_obs)
+    mu, std, _ = policy(chosen_obs)
+    kl_div = torch.mean(torch.log(std/old_std) + (old_std**2 + (old_mu - mu)**2)/(2*std**2) - 0.5)
+    
+    return dpo + kl_coef * kl_div
 
 def evaluate_policy(policy, env, device, num_episodes=10):
     """Evaluate policy performance"""
@@ -90,7 +115,7 @@ def evaluate_policy(policy, env, device, num_episodes=10):
 
 def main(args):
     # Setup environment
-    env = gym.make("Humanoid-v4")
+    env = gym.make("Humanoid-v5")
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
     
@@ -100,13 +125,38 @@ def main(args):
     policy = policy.to(args.device)
     policy.train()
     
+    # Create copy of old policy for KL penalty
+    old_policy = BCPolicyRNN(obs_dim, act_dim)
+    old_policy.load_state_dict(policy.state_dict())
+    old_policy = old_policy.to(args.device)
+    old_policy.eval()
+    
     # Load preferences dataset
     preferences = load_preferences(args.preferences_path)
+    
+    # Filter out preferences with trajectories shorter than seq_len
+    seq_len = 32  # Same as used in training
+    valid_preferences = []
+    for pref in preferences:
+        if (len(pref["chosen_obs"]) >= seq_len and 
+            len(pref["rejected_obs"]) >= seq_len):
+            valid_preferences.append(pref)
+    
+    preferences = valid_preferences[:TRAIN_SIZE]
     num_prefs = len(preferences)
-    print(f"Loaded {num_prefs} preferences")
+    print(f"Using {num_prefs} preferences after filtering for minimum length")
     
     # Setup optimizer
     optimizer = optim.Adam(policy.parameters(), lr=args.learning_rate)
+    
+    # Add early stopping
+    patience = 10
+    no_improvement = 0
+    
+    # Add learning rate scheduling
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='max', factor=0.5, patience=5, verbose=True
+    )
     
     # Training loop
     batch_size = args.batch_size
@@ -131,13 +181,17 @@ def main(args):
             
             # Compute loss and update
             optimizer.zero_grad()
-            loss = dpo_loss(policy, 
+            loss = dpo_loss(policy, old_policy,
                           batch_chosen_obs, batch_chosen_act,
                           batch_rejected_obs, batch_rejected_act,
-                          beta=args.beta)
+                          beta=args.beta,
+                          kl_coef=args.kl_coef)
             loss.backward()
-            optimizer.step()
             
+            # Add gradient clipping
+            torch.nn.utils.clip_grad_norm_(policy.parameters(), args.max_grad_norm)
+            
+            optimizer.step()
             epoch_losses.append(loss.item())
         
         # Log epoch metrics
@@ -149,11 +203,23 @@ def main(args):
             mean_return = evaluate_policy(policy, env, args.device)
             print(f"Epoch {epoch+1}, Mean Return: {mean_return:.2f}")
             
-            # Save best model based on returns
+            # Learning rate scheduling
+            scheduler.step(mean_return)
+            
+            # Save best model and check early stopping
             if mean_return > best_return:
                 best_return = mean_return
                 torch.save(policy.state_dict(), args.save_path)
                 print(f"Saved new best model with return {mean_return:.2f}")
+                no_improvement = 0
+            else:
+                no_improvement += 1
+                if no_improvement >= patience:
+                    print("Early stopping triggered!")
+                    break
+    
+    # Load best model at the end
+    policy.load_state_dict(torch.load(args.save_path))
 
 if __name__ == "__main__":
     import argparse
@@ -168,9 +234,13 @@ if __name__ == "__main__":
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--num-epochs", type=int, default=100)
     parser.add_argument("--batch-size", type=int, default=32)
-    parser.add_argument("--learning-rate", type=float, default=1e-4)
+    parser.add_argument("--learning-rate", type=float, default=1e-5)
     parser.add_argument("--beta", type=float, default=0.1,
                        help="Temperature parameter for DPO loss")
+    parser.add_argument("--kl-coef", type=float, default=0.1,
+                       help="KL divergence coefficient")
+    parser.add_argument("--max-grad-norm", type=float, default=1.0,
+                       help="Maximum gradient norm for clipping")
     parser.add_argument("--eval-interval", type=int, default=5,
                        help="Epochs between evaluations")
     

@@ -20,6 +20,8 @@ elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
 else:
     DEVICE = 'cpu'
     
+print(f"Using device: {DEVICE}")
+
 MODEL_PATH = "bc_rnn_humanoid.pth"
 OPT_PATH = "bc_rnn_humanoid_opt.pth"
 
@@ -66,7 +68,6 @@ class BCPolicyRNN(nn.Module):
     def __init__(self, obs_dim, act_dim, hidden_size=256, num_layers=1):
         super().__init__()
         self.rnn = nn.GRU(obs_dim, hidden_size, num_layers, batch_first=True)
-        # mean head
         self.mean_head = nn.Linear(hidden_size, act_dim)
         # global learnable log-std for each action dim
         self.log_std = nn.Parameter(torch.zeros(act_dim))

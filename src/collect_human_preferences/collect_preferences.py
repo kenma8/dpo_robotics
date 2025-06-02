@@ -37,9 +37,8 @@ def main(args):
 
     for i in range(args.num_pairs):
         # Use same seed for both trajectories in the pair
-        pair_seed = len(preferences)
-        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device, seed=pair_seed)
-        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device, seed=pair_seed)
+        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device)
+        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device)
 
         # Randomize which is shown on the left/right
         if random.random() < 0.5:
@@ -53,7 +52,7 @@ def main(args):
 
         choice = display_videos(left_traj["frames"], right_traj["frames"],
                               label_left=left_label, label_right=right_label,
-                              last_frame_only=False)
+                              last_frame_only=False, fps=60)
 
         # Determine which trajectory is model_1
         chosen_traj = left_traj if choice == 1 else right_traj

@@ -15,11 +15,11 @@ MODEL_REGISTRY = {
 
 
 # TODO: revisit when we have other models. Idk if this will work for other model types
-def rollout_trajectory(model, env, max_steps=1000, device="cpu", seed=None):
+def rollout_trajectory(model, env, max_steps=1000, device="cpu"):
     """
     Roll out a trajectory with optional seed for reproducible initial state
     """
-    obs, _ = env.reset(seed=seed)  # Set seed for reproducible initial state
+    obs, _ = env.reset()  # Set seed for reproducible initial state
     frames = []
     observations = []
     actions = []
@@ -110,7 +110,7 @@ def load_env(env_name):
         raise ValueError(f"{env_name!r} is not a valid Gym environment.")
 
 
-def display_videos(frames_left, frames_right, label_left="Model 1", label_right="Model 2", fps=30, last_frame_only=False):
+def display_videos(frames_left, frames_right, label_left="Model 1", label_right="Model 2", fps=60, last_frame_only=False):
     pygame.init()
 
     # Assume both videos are same shape

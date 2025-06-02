@@ -1,4 +1,3 @@
-
 import gymnasium as gym
 import torch
 from torch.distributions import Normal, Independent
@@ -16,8 +15,11 @@ MODEL_REGISTRY = {
 
 
 # TODO: revisit when we have other models. Idk if this will work for other model types
-def rollout_trajectory(model, env, max_steps=1000, device="cpu"):
-    obs, _ = env.reset()
+def rollout_trajectory(model, env, max_steps=1000, device="cpu", seed=None):
+    """
+    Roll out a trajectory with optional seed for reproducible initial state
+    """
+    obs, _ = env.reset(seed=seed)  # Set seed for reproducible initial state
     frames = []
     observations = []
     actions = []
@@ -108,7 +110,7 @@ def load_env(env_name):
         raise ValueError(f"{env_name!r} is not a valid Gym environment.")
 
 
-def display_videos(frames_left, frames_right, label_left="Model 1", label_right="Model 2", fps=30):
+def display_videos(frames_left, frames_right, label_left="Model 1", label_right="Model 2", fps=30, last_frame_only=False):
     pygame.init()
 
     # Assume both videos are same shape
@@ -122,33 +124,28 @@ def display_videos(frames_left, frames_right, label_left="Model 1", label_right=
     label_left_surface = font.render(label_left, True, (255, 255, 255))
     label_right_surface = font.render(label_right, True, (255, 255, 255))
 
-    clock = pygame.time.Clock()
-    # TODO: look at this for allowing one to fall and the other keep going
-    # TODO: currently, this stops both when one falls
-    num_frames = min(len(frames_left), len(frames_right))
+    if last_frame_only:
+        # Get last frame from shorter trajectory
+        min_length = min(len(frames_left), len(frames_right))
+        last_frame_idx = min_length - 1
+        last_frame_left = frames_left[last_frame_idx]
+        last_frame_right = frames_right[last_frame_idx]
 
-    for i in range(num_frames):
+        # Display last frames
+        frame_left = pygame.surfarray.make_surface(last_frame_left.swapaxes(0, 1))
+        frame_right = pygame.surfarray.make_surface(last_frame_right.swapaxes(0, 1))
+        print("Press 1 (left) or 2 (right) to indicate which trajectory you prefer.")
+    else:
+        clock = pygame.time.Clock()
+        num_frames = min(len(frames_left), len(frames_right))
+        frame_idx = 0
+        done_playing = False
+
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-        frame_left = pygame.surfarray.make_surface(frames_left[i].swapaxes(0, 1))
-        frame_right = pygame.surfarray.make_surface(frames_right[i].swapaxes(0, 1))
-
-        screen.blit(frame_left, (0, 0))
-        screen.blit(frame_right, (frame_width + padding, 0))
-
-        screen.blit(label_left_surface, (10, 10))
-        screen.blit(label_right_surface, (frame_width + padding + 10, 10))
-
-        pygame.display.flip()
-        clock.tick(fps)
-
-    # Wait for user input
-    print("Press 1 (left) or 2 (right) to indicate which trajectory you prefer.")
-    while True:
-        for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     pygame.quit()
@@ -156,3 +153,26 @@ def display_videos(frames_left, frames_right, label_left="Model 1", label_right=
                 elif event.key == pygame.K_2:
                     pygame.quit()
                     return 2
+
+        if last_frame_only:
+            screen.blit(frame_left, (0, 0))
+            screen.blit(frame_right, (frame_width + padding, 0))
+            screen.blit(label_left_surface, (10, 10))
+            screen.blit(label_right_surface, (frame_width + padding + 10, 10))
+            pygame.display.flip()
+        else:
+            if frame_idx < num_frames:
+                frame_left = pygame.surfarray.make_surface(frames_left[frame_idx].swapaxes(0, 1))
+                frame_right = pygame.surfarray.make_surface(frames_right[frame_idx].swapaxes(0, 1))
+
+                screen.blit(frame_left, (0, 0))
+                screen.blit(frame_right, (frame_width + padding, 0))
+                screen.blit(label_left_surface, (10, 10))
+                screen.blit(label_right_surface, (frame_width + padding + 10, 10))
+
+                pygame.display.flip()
+                clock.tick(fps)
+                frame_idx += 1
+            elif not done_playing:
+                print("Press 1 (left) or 2 (right) to indicate which trajectory you prefer.")
+                done_playing = True

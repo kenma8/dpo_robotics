@@ -36,8 +36,10 @@ def main(args):
         preferences = []
 
     for i in range(args.num_pairs):
-        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device)
-        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device)
+        # Use same seed for both trajectories in the pair
+        pair_seed = len(preferences)
+        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device, seed=pair_seed)
+        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device, seed=pair_seed)
 
         # Randomize which is shown on the left/right
         if random.random() < 0.5:
@@ -50,7 +52,8 @@ def main(args):
             left_is_model1 = False
 
         choice = display_videos(left_traj["frames"], right_traj["frames"],
-                                label_left=left_label, label_right=right_label)
+                              label_left=left_label, label_right=right_label,
+                              last_frame_only=False)
 
         # Determine which trajectory is model_1
         chosen_traj = left_traj if choice == 1 else right_traj
@@ -109,8 +112,8 @@ if __name__ == "__main__":
 Example usage in terminal 
 
 python -m src.collect_human_preferences.collect_preferences \
-  --model-1-path bc_rnn_humanoid.pth \
-  --model-2-path bc_rnn_humanoid.pth \
+  --model-1-path policies/bcc_rnn_humanoid_deterministic/bc_rnn_humanoid.pth \
+  --model-2-path policies/bcc_rnn_humanoid_deterministic/bc_rnn_humanoid.pth \
   --env-name Humanoid-v5 \
   --model-class BCPolicyRNN \
   --num-pairs 5 \

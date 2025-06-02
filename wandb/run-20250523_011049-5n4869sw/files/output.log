@@ -12,3 +12,48 @@ Logging to ./runs/ppo_humanoid/20250523-011049/PPO_1
 |    time_elapsed    | 12       |
 |    total_timesteps | 65536    |
 ---------------------------------
+Traceback (most recent call last):
+  File "/Users/kenma/Documents/dpo_robotics/src/train_humanoid_ppo.py", line 47, in <module>
+    model.learn(
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/ppo/ppo.py", line 311, in learn
+    return super().learn(
+           ^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/on_policy_algorithm.py", line 337, in learn
+    self.train()
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/ppo/ppo.py", line 213, in train
+    values, log_prob, entropy = self.policy.evaluate_actions(rollout_data.observations, actions)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/policies.py", line 732, in evaluate_actions
+    latent_pi, latent_vf = self.mlp_extractor(features)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/torch_layers.py", line 257, in forward
+    return self.forward_actor(features), self.forward_critic(features)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/stable_baselines3/common/torch_layers.py", line 260, in forward_actor
+    return self.policy_net(features)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/container.py", line 240, in forward
+    input = module(input)
+            ^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/envs/cs224r/lib/python3.11/site-packages/torch/nn/modules/linear.py", line 125, in forward
+    return F.linear(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

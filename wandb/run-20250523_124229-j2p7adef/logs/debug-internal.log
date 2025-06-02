@@ -1,0 +1,23 @@
+{"time":"2025-05-23T12:42:30.097003-07:00","level":"INFO","msg":"stream: starting","core version":"0.19.11","symlink path":"/Users/kenma/Documents/dpo_robotics/wandb/run-20250523_124229-j2p7adef/logs/debug-core.log"}
+{"time":"2025-05-23T12:42:30.350269-07:00","level":"INFO","msg":"created new stream","id":"j2p7adef"}
+{"time":"2025-05-23T12:42:30.350497-07:00","level":"INFO","msg":"stream: started","id":"j2p7adef"}
+{"time":"2025-05-23T12:42:30.35074-07:00","level":"INFO","msg":"sender: started","stream_id":"j2p7adef"}
+{"time":"2025-05-23T12:42:30.350728-07:00","level":"INFO","msg":"handler: started","stream_id":"j2p7adef"}
+{"time":"2025-05-23T12:42:30.35079-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"j2p7adef"}
+{"time":"2025-05-23T12:42:30.649695-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-05-23T12:42:30.699498-07:00","level":"ERROR","msg":"error getting latest commit","error":"exit status 128"}
+{"time":"2025-05-23T12:42:41.470324-07:00","level":"INFO","msg":"tensorboard: no root directory after 10 seconds, using working directory"}
+{"time":"2025-05-23T13:02:16.086886-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/j2p7adef/file_stream\": read tcp 10.27.182.197:59148->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T13:22:31.144597-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/j2p7adef/file_stream\": read tcp 10.27.182.197:59821->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T13:39:02.411846-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:59753->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T13:46:31.093145-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/j2p7adef/file_stream\": read tcp 10.27.182.197:61146->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T13:47:46.044887-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/j2p7adef/file_stream\": read tcp 10.27.182.197:61171->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T13:57:16.089281-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/j2p7adef/file_stream\": read tcp 10.27.182.197:61313->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T14:07:49.057917-07:00","level":"INFO","msg":"stream: closing","id":"j2p7adef"}
+{"time":"2025-05-23T14:07:49.05842-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-05-23T14:07:49.058659-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-05-23T14:07:49.567467-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-05-23T14:07:49.74079-07:00","level":"INFO","msg":"handler: closed","stream_id":"j2p7adef"}
+{"time":"2025-05-23T14:07:49.741738-07:00","level":"INFO","msg":"sender: closed","stream_id":"j2p7adef"}
+{"time":"2025-05-23T14:07:49.741807-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"j2p7adef"}
+{"time":"2025-05-23T14:07:49.741866-07:00","level":"INFO","msg":"stream: closed","id":"j2p7adef"}

@@ -10,7 +10,7 @@ import wandb
 from wandb.integration.sb3 import WandbCallback
 
 env_id = "Humanoid-v5"  
-num_envs = 32
+num_envs = 4
 
 env = make_vec_env(env_id, n_envs=num_envs)
 env = VecNormalize(env, norm_obs=True, norm_reward=True)
@@ -29,21 +29,20 @@ model = PPO(
     env,
     device=device,
     verbose=1,
-    learning_rate=1e-4,
+    learning_rate=3e-4,
     n_steps=2048,        
-    batch_size=256,
-    n_epochs=1000,
-    gamma=0.995,
+    batch_size=64,
+    n_epochs=10,
+    gamma=0.99,
     gae_lambda=0.95,
     clip_range=0.2,
     ent_coef=0.01,
     vf_coef=0.5,
     max_grad_norm=0.5,
-    policy_kwargs=dict(net_arch=[dict(pi=[512, 512, 512], vf=[512, 512, 512])]),
     tensorboard_log=f"./runs/ppo_humanoid/{timestamp}"
 )
 
-total_timesteps = 655360
+total_timesteps = 10000000
 model.learn(
     total_timesteps=total_timesteps,
     callback=WandbCallback(

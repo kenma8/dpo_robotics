@@ -1,0 +1,19 @@
+{"time":"2025-05-23T01:24:32.650869-07:00","level":"INFO","msg":"stream: starting","core version":"0.19.11","symlink path":"/Users/kenma/Documents/dpo_robotics/wandb/run-20250523_012432-tdbqz6c8/logs/debug-core.log"}
+{"time":"2025-05-23T01:24:32.837376-07:00","level":"INFO","msg":"created new stream","id":"tdbqz6c8"}
+{"time":"2025-05-23T01:24:32.83741-07:00","level":"INFO","msg":"stream: started","id":"tdbqz6c8"}
+{"time":"2025-05-23T01:24:32.837442-07:00","level":"INFO","msg":"handler: started","stream_id":"tdbqz6c8"}
+{"time":"2025-05-23T01:24:32.83747-07:00","level":"INFO","msg":"sender: started","stream_id":"tdbqz6c8"}
+{"time":"2025-05-23T01:24:32.83755-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"tdbqz6c8"}
+{"time":"2025-05-23T01:24:32.98545-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-05-23T01:24:33.007857-07:00","level":"ERROR","msg":"error getting latest commit","error":"exit status 128"}
+{"time":"2025-05-23T01:24:43.751835-07:00","level":"INFO","msg":"tensorboard: no root directory after 10 seconds, using working directory"}
+{"time":"2025-05-23T01:26:03.453352-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/tdbqz6c8/file_stream\": read tcp 10.27.182.197:51231->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T01:45:44.127665-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-05-23T01:45:44.127903-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-05-23T01:45:45.140588-07:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading model.zip","runtime_seconds":0.944649958,"progress":"8.5MB/10.4MB"}],"total_operations":1}}
+{"time":"2025-05-23T01:45:48.262419-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-05-23T01:45:48.429542-07:00","level":"INFO","msg":"stream: closing","id":"tdbqz6c8"}
+{"time":"2025-05-23T01:45:48.429808-07:00","level":"INFO","msg":"handler: closed","stream_id":"tdbqz6c8"}
+{"time":"2025-05-23T01:45:48.429838-07:00","level":"INFO","msg":"sender: closed","stream_id":"tdbqz6c8"}
+{"time":"2025-05-23T01:45:48.4299-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"tdbqz6c8"}
+{"time":"2025-05-23T01:45:48.429949-07:00","level":"INFO","msg":"stream: closed","id":"tdbqz6c8"}

@@ -1,0 +1,41 @@
+{"time":"2025-05-23T01:47:45.243051-07:00","level":"INFO","msg":"stream: starting","core version":"0.19.11","symlink path":"/Users/kenma/Documents/dpo_robotics/wandb/run-20250523_014745-z22ekc98/logs/debug-core.log"}
+{"time":"2025-05-23T01:47:45.448984-07:00","level":"INFO","msg":"created new stream","id":"z22ekc98"}
+{"time":"2025-05-23T01:47:45.449019-07:00","level":"INFO","msg":"stream: started","id":"z22ekc98"}
+{"time":"2025-05-23T01:47:45.449042-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"z22ekc98"}
+{"time":"2025-05-23T01:47:45.450159-07:00","level":"INFO","msg":"handler: started","stream_id":"z22ekc98"}
+{"time":"2025-05-23T01:47:45.450323-07:00","level":"INFO","msg":"sender: started","stream_id":"z22ekc98"}
+{"time":"2025-05-23T01:47:45.749469-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-05-23T01:47:45.98233-07:00","level":"ERROR","msg":"error getting latest commit","error":"exit status 128"}
+{"time":"2025-05-23T01:47:57.335621-07:00","level":"INFO","msg":"tensorboard: no root directory after 10 seconds, using working directory"}
+{"time":"2025-05-23T01:52:46.306666-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:52446->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T01:52:48.930306-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:52447->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T01:53:01.518586-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:52454->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T02:06:16.291205-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:53447->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T02:08:46.247216-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:53476->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T02:16:09.07227-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": dial tcp 35.186.228.49:443: connect: operation timed out"}
+{"time":"2025-05-23T02:30:16.201935-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:54607->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:17:46.126757-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:56343->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:33:46.234535-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:56953->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:38:01.388778-07:00","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2025-05-23T03:40:01.139922-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:57018->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:40:30.833883-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:57022->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:41:15.937197-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:57031->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:41:45.829935-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:57034->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:45:15.817113-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:57510->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T03:49:30.875276-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:57562->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T04:01:30.8805-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:58112->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T04:02:45.864601-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/z22ekc98/file_stream\": read tcp 10.27.182.197:58122->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T05:06:40.627219-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:59808->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T05:27:32.305304-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:59825->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T05:43:15.833464-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:60326->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T06:05:34.116474-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:61040->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T06:22:13.137109-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:61551->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-05-23T06:50:21.407956-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-05-23T06:50:21.408277-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-05-23T06:50:22.423551-07:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading model.zip","runtime_seconds":0.084270667,"progress":"2.0MB/10.4MB"}],"total_operations":1}}
+{"time":"2025-05-23T06:50:23.211796-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-05-23T06:50:23.347755-07:00","level":"INFO","msg":"stream: closing","id":"z22ekc98"}
+{"time":"2025-05-23T06:50:23.348002-07:00","level":"INFO","msg":"handler: closed","stream_id":"z22ekc98"}
+{"time":"2025-05-23T06:50:23.348031-07:00","level":"INFO","msg":"sender: closed","stream_id":"z22ekc98"}
+{"time":"2025-05-23T06:50:23.34806-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"z22ekc98"}
+{"time":"2025-05-23T06:50:23.348106-07:00","level":"INFO","msg":"stream: closed","id":"z22ekc98"}

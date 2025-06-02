@@ -1,0 +1,18 @@
+{"time":"2025-05-23T01:10:49.602708-07:00","level":"INFO","msg":"stream: starting","core version":"0.19.11","symlink path":"/Users/kenma/Documents/dpo_robotics/wandb/run-20250523_011049-5n4869sw/logs/debug-core.log"}
+{"time":"2025-05-23T01:10:49.790545-07:00","level":"INFO","msg":"created new stream","id":"5n4869sw"}
+{"time":"2025-05-23T01:10:49.79074-07:00","level":"INFO","msg":"stream: started","id":"5n4869sw"}
+{"time":"2025-05-23T01:10:49.790754-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"5n4869sw"}
+{"time":"2025-05-23T01:10:49.790972-07:00","level":"INFO","msg":"handler: started","stream_id":"5n4869sw"}
+{"time":"2025-05-23T01:10:49.790983-07:00","level":"INFO","msg":"sender: started","stream_id":"5n4869sw"}
+{"time":"2025-05-23T01:10:49.913957-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-05-23T01:10:49.933387-07:00","level":"ERROR","msg":"error getting latest commit","error":"exit status 128"}
+{"time":"2025-05-23T01:11:00.788172-07:00","level":"INFO","msg":"tensorboard: no root directory after 10 seconds, using working directory"}
+{"time":"2025-05-23T01:19:08.228286-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": read tcp 10.27.182.197:50200->35.186.228.49:443: read: operation timed out"}
+{"time":"2025-05-23T01:21:55.416309-07:00","level":"INFO","msg":"stream: closing","id":"5n4869sw"}
+{"time":"2025-05-23T01:21:55.416793-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-05-23T01:21:55.417093-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-05-23T01:21:55.887255-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-05-23T01:21:56.044101-07:00","level":"INFO","msg":"handler: closed","stream_id":"5n4869sw"}
+{"time":"2025-05-23T01:21:56.04509-07:00","level":"INFO","msg":"sender: closed","stream_id":"5n4869sw"}
+{"time":"2025-05-23T01:21:56.045134-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"5n4869sw"}
+{"time":"2025-05-23T01:21:56.045691-07:00","level":"INFO","msg":"stream: closed","id":"5n4869sw"}

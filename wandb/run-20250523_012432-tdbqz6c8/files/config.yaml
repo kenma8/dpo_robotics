@@ -1,0 +1,180 @@
+_current_progress_remaining:
+    value: 1
+_custom_logger:
+    value: "False"
+_episode_num:
+    value: 0
+_last_episode_starts:
+    value: |-
+        [ True  True  True  True  True  True  True  True  True  True  True  True
+          True  True  True  True  True  True  True  True  True  True  True  True
+          True  True  True  True  True  True  True  True]
+_last_obs:
+    value: |-
+        [[ 0.67254955 -0.579745   -0.09211795 ...  0.          0.
+           0.        ]
+         [ 1.3519961   0.2871842  -1.0317125  ...  0.          0.
+           0.        ]
+         [-1.2499948   0.03655378 -1.0374196  ...  0.          0.
+           0.        ]
+         ...
+         [-0.9514001   0.21921754 -1.2366867  ...  0.          0.
+           0.        ]
+         [-0.35550782  1.8241428   1.7230653  ...  0.          0.
+           0.        ]
+         [-1.5094825   0.21981981 -0.37781394 ...  0.          0.
+           0.        ]]
+_last_original_obs:
+    value: |-
+        [[ 1.40537356  0.99719434 -0.00218888 ...  0.          0.
+           0.        ]
+         [ 1.40974272  1.00177346 -0.00733162 ...  0.          0.
+           0.        ]
+         [ 1.39301068  1.00044963 -0.00736285 ...  0.          0.
+           0.        ]
+         ...
+         [ 1.39493079  1.00141446 -0.00845351 ...  0.          0.
+           0.        ]
+         [ 1.39876266  1.00989167  0.00774627 ...  0.          0.
+           0.        ]
+         [ 1.39134205  1.00141764 -0.00375259 ...  0.          0.
+           0.        ]]
+_logger:
+    value: <stable_baselines3.common.logger.Logger object at 0x32425a290>
+_n_updates:
+    value: 0
+_num_timesteps_at_start:
+    value: 0
+_stats_window_size:
+    value: 100
+_total_timesteps:
+    value: 655360
+_vec_normalize_env:
+    value: <stable_baselines3.common.vec_env.vec_normalize.VecNormalize object at 0x166d40710>
+_wandb:
+    value:
+        cli_version: 0.19.11
+        code_path: code/src/train_humanoid_ppo.py
+        m: []
+        python_version: 3.11.11
+        t:
+            "1":
+                - 1
+                - 55
+            "2":
+                - 1
+                - 55
+            "3":
+                - 1
+                - 2
+                - 3
+                - 13
+                - 22
+                - 23
+                - 35
+                - 55
+            "4": 3.11.11
+            "5": 0.19.11
+            "8":
+                - 5
+            "12": 0.19.11
+            "13": darwin-arm64
+action_noise:
+    value: None
+action_space:
+    value: Box(-0.4, 0.4, (17,), float32)
+algo:
+    value: PPO
+batch_size:
+    value: 256
+clip_range:
+    value: <function get_schedule_fn.<locals>.<lambda> at 0x3226f25c0>
+clip_range_vf:
+    value: None
+device:
+    value: cpu
+ent_coef:
+    value: 0.01
+env:
+    value: <stable_baselines3.common.vec_env.vec_normalize.VecNormalize object at 0x166d40710>
+ep_info_buffer:
+    value: deque([], maxlen=100)
+ep_success_buffer:
+    value: deque([], maxlen=100)
+gae_lambda:
+    value: 0.95
+gamma:
+    value: 0.995
+learning_rate:
+    value: 0.0001
+lr_schedule:
+    value: <function get_schedule_fn.<locals>.<lambda> at 0x1616f1940>
+max_grad_norm:
+    value: 0.5
+n_envs:
+    value: 32
+n_epochs:
+    value: 100
+n_steps:
+    value: 2048
+normalize_advantage:
+    value: "True"
+num_timesteps:
+    value: 0
+observation_space:
+    value: Box(-inf, inf, (348,), float64)
+policy:
+    value: |-
+        ActorCriticPolicy(
+          (features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (pi_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (vf_features_extractor): FlattenExtractor(
+            (flatten): Flatten(start_dim=1, end_dim=-1)
+          )
+          (mlp_extractor): MlpExtractor(
+            (policy_net): Sequential(
+              (0): Linear(in_features=348, out_features=512, bias=True)
+              (1): Tanh()
+              (2): Linear(in_features=512, out_features=512, bias=True)
+              (3): Tanh()
+            )
+            (value_net): Sequential(
+              (0): Linear(in_features=348, out_features=512, bias=True)
+              (1): Tanh()
+              (2): Linear(in_features=512, out_features=512, bias=True)
+              (3): Tanh()
+            )
+          )
+          (action_net): Linear(in_features=512, out_features=17, bias=True)
+          (value_net): Linear(in_features=512, out_features=1, bias=True)
+        )
+policy_class:
+    value: <class 'stable_baselines3.common.policies.ActorCriticPolicy'>
+policy_kwargs:
+    value: '{''net_arch'': [{''pi'': [512, 512], ''vf'': [512, 512]}]}'
+rollout_buffer:
+    value: <stable_baselines3.common.buffers.RolloutBuffer object at 0x166be0650>
+rollout_buffer_class:
+    value: <class 'stable_baselines3.common.buffers.RolloutBuffer'>
+rollout_buffer_kwargs:
+    value: '{}'
+sde_sample_freq:
+    value: -1
+seed:
+    value: None
+start_time:
+    value: 1747988673744807000
+target_kl:
+    value: None
+tensorboard_log:
+    value: ./runs/ppo_humanoid/20250523-012432
+use_sde:
+    value: "False"
+verbose:
+    value: 1
+vf_coef:
+    value: 0.5

@@ -40,9 +40,11 @@ def main(args):
 
         print(f"Collecting pair {i + 1}/{args.num_pairs}...")
 
+        initial_seed = random.randint(0, 1000000)
+
         # Use same seed for both trajectories in the pair
-        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device, seed=len(preferences))
-        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device, seed=len(preferences))
+        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device, seed=initial_seed)
+        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device, seed=initial_seed)
 
         # Randomize which is shown on the left/right
         if random.random() < 0.5:

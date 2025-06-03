@@ -52,7 +52,7 @@ class SequenceDataset(Dataset):
     
 # Probabilistic
 class BCPolicyMLP(nn.Module):
-    def __init__(self, obs_dim, act_dim, hidden_size=256, num_layers=1):
+    def __init__(self, obs_dim, act_dim, hidden_size=256, num_layers=2):
         super().__init__()
         layers = []
         input_dim = obs_dim
@@ -64,11 +64,11 @@ class BCPolicyMLP(nn.Module):
         self.mean_head = nn.Linear(hidden_size, act_dim)
         self.log_std = nn.Parameter(torch.zeros(act_dim))
 
-    def forward(self, obs_seq):
+    def forward(self, obs_seq, hidden=None):
         x = self.net(obs_seq)
         mu = self.mean_head(x)  # (B, T, act_dim)
         std = torch.exp(self.log_std).expand_as(mu)
-        return mu, std
+        return mu, std, hidden
 
 
 from torch.distributions import Normal, Independent

@@ -3,6 +3,7 @@ import torch
 from torch.distributions import Normal, Independent
 import numpy as np
 from ..train_humanoid_baseline import BCPolicyRNN
+from ..train_pusher_baseline import BCPolicyMLP
 import pygame
 import sys
 
@@ -10,6 +11,7 @@ import sys
 # TODO: add more models as we get more models. rn, we can only use BCPolicyRNN
 MODEL_REGISTRY = {
     "BCPolicyRNN": BCPolicyRNN,
+    "BCPolicyMLP": BCPolicyMLP,
     # Add more models as needed
 }
 

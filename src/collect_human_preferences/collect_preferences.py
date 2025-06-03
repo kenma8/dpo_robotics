@@ -4,6 +4,7 @@ import imageio
 from torch.distributions import Normal, Independent
 import numpy as np
 from ..train_humanoid_baseline import BCPolicyRNN
+from ..train_pusher_baseline import BCPolicyMLP
 import pygame
 import sys
 import pickle
@@ -118,5 +119,15 @@ python -m src.collect_human_preferences.collect_preferences \
   --num-pairs 5 \
   --max-steps 750 \
   --save-path src/collect_human_preferences/preferences/humanoid_bc_vs_dpo.pkl \
+  --resume
+
+  python -m src.collect_human_preferences.collect_preferences \
+  --model-1-path policies/bc_mlp_pusher/bc_mlp_pusher.pth \
+  --model-2-path policies/bc_mlp_pusher/bc_mlp_pusher.pth \
+  --env-name Pusher-v5 \
+  --model-class BCPolicyMLP \
+  --num-pairs 5 \
+  --max-steps 750 \
+  --save-path src/collect_human_preferences/preferences/pusher_bc_vs_dpo.pkl \
   --resume
 """

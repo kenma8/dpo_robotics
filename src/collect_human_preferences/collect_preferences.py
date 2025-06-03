@@ -37,9 +37,12 @@ def main(args):
         preferences = []
 
     for i in range(args.num_pairs):
+
+        print(f"Collecting pair {i + 1}/{args.num_pairs}...")
+
         # Use same seed for both trajectories in the pair
-        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device)
-        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device)
+        traj_1 = rollout_trajectory(model_1, env, args.max_steps, args.device, seed=len(preferences))
+        traj_2 = rollout_trajectory(model_2, env, args.max_steps, args.device, seed=len(preferences))
 
         # Randomize which is shown on the left/right
         if random.random() < 0.5:
@@ -128,6 +131,6 @@ python -m src.collect_human_preferences.collect_preferences \
   --model-class BCPolicyMLP \
   --num-pairs 5 \
   --max-steps 750 \
-  --save-path src/collect_human_preferences/preferences/pusher_bc_vs_dpo.pkl \
+  --save-path src/collect_human_preferences/preferences/pusher_same_start.pkl \
   --resume
 """

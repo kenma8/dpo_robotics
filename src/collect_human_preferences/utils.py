@@ -17,11 +17,14 @@ MODEL_REGISTRY = {
 
 
 # TODO: revisit when we have other models. Idk if this will work for other model types
-def rollout_trajectory(model, env, max_steps=1000, device="cpu"):
+def rollout_trajectory(model, env, max_steps=1000, device="cpu", seed=None):
     """
     Roll out a trajectory with optional seed for reproducible initial state
     """
-    obs, _ = env.reset()  # Set seed for reproducible initial state
+    if seed is not None:
+        obs, _ = env.reset(seed=seed)  # Set seed for reproducible initial state
+    else:
+        obs, _ = env.reset()
     frames = []
     observations = []
     actions = []
@@ -38,7 +41,7 @@ def rollout_trajectory(model, env, max_steps=1000, device="cpu"):
             # divide std by 3 to get a narrower/taller normal distr.
             # (make model take actions closer to mean)
             # TODO: change this for other models / for different experiments
-            std = torch.clamp(std / 3, min=1e-4)
+            std = torch.clamp(std, min=1e-4)
             dist = Independent(Normal(mu, std), 1)
             # sample action and clip it to stay in the bounds of the env action space
             action = dist.sample()[0, 0].cpu().numpy()
@@ -112,7 +115,7 @@ def load_env(env_name):
         raise ValueError(f"{env_name!r} is not a valid Gym environment.")
 
 
-def display_videos(frames_left, frames_right, label_left="Model 1", label_right="Model 2", fps=60, last_frame_only=False):
+def display_videos(frames_left, frames_right, label_left="Model 1", label_right="Model 2", fps=30, last_frame_only=False):
     pygame.init()
 
     # Assume both videos are same shape

@@ -71,7 +71,9 @@ def main(args):
                 "right_model": right_label,
                 "preferred_side": "left" if choice == 1 else "right",
                 "preferred_model": left_label if choice == 1 else right_label,
-                "chosen_is_model1": chosen_is_model1
+                "chosen_is_model1": chosen_is_model1,
+                "chosen_reward": float(np.sum(chosen_traj["rewards"])),
+                "rejected_reward": float(np.sum(rejected_traj["rewards"]))
             }
         }
         preferences.append(preference)

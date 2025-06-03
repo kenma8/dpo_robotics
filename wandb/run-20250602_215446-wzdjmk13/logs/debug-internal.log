@@ -1,0 +1,18 @@
+{"time":"2025-06-02T21:54:46.344772-07:00","level":"INFO","msg":"stream: starting","core version":"0.19.11","symlink path":"/Users/kenma/Documents/dpo_robotics/wandb/run-20250602_215446-wzdjmk13/logs/debug-core.log"}
+{"time":"2025-06-02T21:54:46.612373-07:00","level":"INFO","msg":"created new stream","id":"wzdjmk13"}
+{"time":"2025-06-02T21:54:46.612563-07:00","level":"INFO","msg":"stream: started","id":"wzdjmk13"}
+{"time":"2025-06-02T21:54:46.61274-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"wzdjmk13"}
+{"time":"2025-06-02T21:54:46.612889-07:00","level":"INFO","msg":"handler: started","stream_id":"wzdjmk13"}
+{"time":"2025-06-02T21:54:46.613049-07:00","level":"INFO","msg":"sender: started","stream_id":"wzdjmk13"}
+{"time":"2025-06-02T21:54:46.759597-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-02T21:54:57.53776-07:00","level":"INFO","msg":"tensorboard: no root directory after 10 seconds, using working directory"}
+{"time":"2025-06-02T22:29:02.343931-07:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/kennethma/dpo_robotics-src/wzdjmk13/file_stream\": read tcp 10.27.179.222:52463->35.186.228.49:443: read: connection reset by peer"}
+{"time":"2025-06-02T22:50:06.413541-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-02T22:50:06.413915-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-02T22:50:07.30552-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-02T22:50:07.429762-07:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 15824-15863, summary, console lines 26808-26852","runtime_seconds":0.122858}],"total_operations":1}}
+{"time":"2025-06-02T22:50:07.568709-07:00","level":"INFO","msg":"stream: closing","id":"wzdjmk13"}
+{"time":"2025-06-02T22:50:07.569194-07:00","level":"INFO","msg":"sender: closed","stream_id":"wzdjmk13"}
+{"time":"2025-06-02T22:50:07.56922-07:00","level":"INFO","msg":"handler: closed","stream_id":"wzdjmk13"}
+{"time":"2025-06-02T22:50:07.569378-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"wzdjmk13"}
+{"time":"2025-06-02T22:50:07.569474-07:00","level":"INFO","msg":"stream: closed","id":"wzdjmk13"}

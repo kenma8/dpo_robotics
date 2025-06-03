@@ -1,0 +1,17 @@
+{"time":"2025-06-02T21:13:45.933124-07:00","level":"INFO","msg":"stream: starting","core version":"0.19.11","symlink path":"/Users/kenma/Documents/dpo_robotics/wandb/run-20250602_211345-5ocvvjed/logs/debug-core.log"}
+{"time":"2025-06-02T21:13:46.177882-07:00","level":"INFO","msg":"created new stream","id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:46.177916-07:00","level":"INFO","msg":"stream: started","id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:46.177948-07:00","level":"INFO","msg":"handler: started","stream_id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:46.177969-07:00","level":"INFO","msg":"sender: started","stream_id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:46.178065-07:00","level":"INFO","msg":"writer: Do: started","stream_id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:46.333943-07:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-02T21:13:48.6295-07:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-02T21:13:48.629521-07:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-02T21:13:49.63815-07:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-06-02T21:13:57.064928-07:00","level":"INFO","msg":"tensorboard: no root directory after 10 seconds, using working directory"}
+{"time":"2025-06-02T21:13:57.483871-07:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-02T21:13:57.630528-07:00","level":"INFO","msg":"stream: closing","id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:57.630578-07:00","level":"INFO","msg":"handler: closed","stream_id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:57.630619-07:00","level":"INFO","msg":"sender: closed","stream_id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:57.631009-07:00","level":"INFO","msg":"writer: Close: closed","stream_id":"5ocvvjed"}
+{"time":"2025-06-02T21:13:57.631069-07:00","level":"INFO","msg":"stream: closed","id":"5ocvvjed"}

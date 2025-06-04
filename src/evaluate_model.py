@@ -3,6 +3,13 @@ import gymnasium as gym
 import numpy as np
 import argparse
 from train_humanoid_baseline import BCPolicyRNN
+from train_pusher_baseline import BCPolicyMLP
+
+MODEL_REGISTRY = {
+    "BCPolicyRNN": BCPolicyRNN,
+    "BCPolicyMLP": BCPolicyMLP,
+    # Add more models as needed
+}
 
 def evaluate_policy(policy, env, device, num_episodes=10, render=False):
     """Evaluate policy performance"""
@@ -16,7 +23,10 @@ def evaluate_policy(policy, env, device, num_episodes=10, render=False):
         while not done:
             obs_tensor = torch.from_numpy(obs[None, None]).float().to(device)
             with torch.no_grad():
-                mu, std, hidden = policy(obs_tensor, hidden)
+                if isinstance(policy, BCPolicyRNN):
+                    mu, std, hidden = policy(obs_tensor, hidden)
+                else:  # BCPolicyMLP
+                    mu, std, _ = policy(obs_tensor, hidden)
             # Use deterministic mean at test time
             action = mu[0, 0].cpu().numpy()
             
@@ -41,12 +51,16 @@ def evaluate_policy(policy, env, device, num_episodes=10, render=False):
 
 def main(args):
     # Setup environment
-    env = gym.make("Humanoid-v5", render_mode="human" if args.render else None)
+    env = gym.make(args.env_name, render_mode="human" if args.render else None)
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
     
     # Load policy
-    policy = BCPolicyRNN(obs_dim, act_dim)
+    if args.model_class not in MODEL_REGISTRY:
+        raise ValueError(f"Unknown model class: {args.model_class}. Must be one of: {list(MODEL_REGISTRY.keys())}")
+    
+    policy_class = MODEL_REGISTRY[args.model_class]
+    policy = policy_class(obs_dim, act_dim)
     policy.load_state_dict(torch.load(args.model_path, map_location=args.device))
     policy = policy.to(args.device)
     policy.eval()
@@ -58,6 +72,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-path", type=str, required=True,
                        help="Path to model weights")
+    parser.add_argument("--env-name", type=str, required=True,
+                       help="Name of the environment (e.g., Humanoid-v4, Pusher-v4)")
+    parser.add_argument("--model-class", type=str, required=True,
+                       help="Model class name (BCPolicyRNN or BCPolicyMLP)")
     parser.add_argument("--device", type=str, 
                        default="cuda" if torch.cuda.is_available() else "cpu",
                        help="Device to run evaluation on")

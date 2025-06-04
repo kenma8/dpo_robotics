@@ -4,9 +4,11 @@ import pickle
 
 
 class PreferencesDataset(Dataset):
-    def __init__(self, path_to_pref_pkl):
-        with open(path_to_pref_pkl, "rb") as f:
-            self.data = pickle.load(f)
+    def __init__(self, *paths_to_pref_pkls):
+        self.data = []
+        for path in paths_to_pref_pkls:
+            with open(path, "rb") as f:
+                self.data.extend(pickle.load(f))
 
     def __len__(self):
         return len(self.data)
@@ -25,3 +27,10 @@ class PreferencesDataset(Dataset):
             "rejected_act": rejected_act  # (T, act_dim)
         }
 
+
+import pickle
+
+with open("preferences/pusher_same_start.pkl", "rb") as f:
+    preferences = pickle.load(f)
+
+print(f"Number of preference examples: {len(preferences)}")

@@ -7,6 +7,8 @@ from tqdm import tqdm
 import os
 import gymnasium as gym
 from torch.distributions import Normal, Independent
+from torch.nn.utils.rnn import pad_sequence
+
 
 from train_humanoid_baseline import BCPolicyRNN
 
@@ -17,23 +19,35 @@ def load_preferences(preferences_path):
     return preferences
 
 def prepare_batch(preferences, batch_indices, device):
-    """Prepare a batch of preferences for training"""
-    batch_chosen_obs = torch.tensor(np.stack([preferences[i]["chosen_obs"] for i in batch_indices]), 
-                                  dtype=torch.float32, device=device)
-    batch_chosen_act = torch.tensor(np.stack([preferences[i]["chosen_act"] for i in batch_indices]), 
-                                  dtype=torch.float32, device=device)
-    batch_rejected_obs = torch.tensor(np.stack([preferences[i]["rejected_obs"] for i in batch_indices]), 
-                                    dtype=torch.float32, device=device)
-    batch_rejected_act = torch.tensor(np.stack([preferences[i]["rejected_act"] for i in batch_indices]), 
-                                    dtype=torch.float32, device=device)
-    
-    return batch_chosen_obs, batch_chosen_act, batch_rejected_obs, batch_rejected_act
+    """Prepare a batch of padded preference sequences"""
+    def get_seq(tensor_list):
+        return pad_sequence([torch.tensor(t, dtype=torch.float32) for t in tensor_list],
+                            batch_first=True)  # [batch_size, max_seq_len, dim]
 
-def get_sequence_log_probs(policy, obs_seq, act_seq):
-    """Get log probs for a sequence using the RNN policy"""
-    mu, std, _ = policy(obs_seq)  # (batch_size, seq_len, act_dim)
-    dist = Independent(Normal(mu, std), 1)  # Make independent over action dimensions
-    return dist.log_prob(act_seq)  # (batch_size, seq_len)
+    chosen_obs = get_seq([preferences[i]["chosen_obs"] for i in batch_indices]).to(device)
+    chosen_act = get_seq([preferences[i]["chosen_act"] for i in batch_indices]).to(device)
+    rejected_obs = get_seq([preferences[i]["rejected_obs"] for i in batch_indices]).to(device)
+    rejected_act = get_seq([preferences[i]["rejected_act"] for i in batch_indices]).to(device)
+
+    return chosen_obs, chosen_act, rejected_obs, rejected_act
+
+def build_mask(padded_seq):
+    # padded_seq: [B, T, D]
+    # Mask where the entire timestep is zero → padding
+    return (padded_seq.abs().sum(dim=2) > 1e-6).float()  # [B, T]
+
+
+def get_sequence_log_probs(policy, obs_seq, act_seq, mask=None):
+    mu, std, _ = policy(obs_seq)
+    dist = Independent(Normal(mu, std), 1)
+    log_probs = dist.log_prob(act_seq)  # [B, T]
+
+    if mask is not None:
+        log_probs = log_probs * mask
+        return log_probs.sum(dim=1) / mask.sum(dim=1).clamp(min=1)
+    else:
+        return log_probs.sum(dim=1)
+
 
 def dpo_loss(policy, chosen_obs, chosen_act, rejected_obs, rejected_act, beta=0.1):
     """
@@ -48,12 +62,10 @@ def dpo_loss(policy, chosen_obs, chosen_act, rejected_obs, rejected_act, beta=0.
         beta: Temperature parameter for DPO loss
     """
     # Get log probs for chosen and rejected trajectories
-    chosen_log_probs = get_sequence_log_probs(policy, chosen_obs, chosen_act)
-    rejected_log_probs = get_sequence_log_probs(policy, rejected_obs, rejected_act)
-    
-    # Sum log probs across time dimension
-    chosen_log_probs = chosen_log_probs.sum(dim=1)  # [batch_size]
-    rejected_log_probs = rejected_log_probs.sum(dim=1)  # [batch_size]
+    mask_chosen = build_mask(chosen_act)
+    mask_rejected = build_mask(rejected_act)
+    chosen_log_probs = get_sequence_log_probs(policy, chosen_obs, chosen_act, mask=mask_chosen)
+    rejected_log_probs = get_sequence_log_probs(policy, rejected_obs, rejected_act, mask=mask_rejected)
     
     # Compute DPO loss
     loss = -torch.mean(
@@ -90,7 +102,7 @@ def evaluate_policy(policy, env, device, num_episodes=10):
 
 def main(args):
     # Setup environment
-    env = gym.make("Humanoid-v4")
+    env = gym.make("Humanoid-v5")
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
     
@@ -176,3 +188,19 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     main(args)
+
+
+"""
+example:
+
+python src/dpo_finetune.py --model-path dpo_robotics/policies/bcc_rnn_humanoid_probabilistic/bc_rnn_humanoid.pth 
+--preferences-path dpo_robotics/src/collect_human_preferences/preferences/humanoid_bc_vs_dpo.pkl 
+--save-path dpo_robotics/policies/bcc_rnn_humanoid_probabilistic/bc_rnn_dpo_humanoid.pth 
+--device cpu 
+--num-epochs 10 
+--eval-interval 1 
+--learning-rate 5e-6 
+--beta 0.05
+
+
+"""

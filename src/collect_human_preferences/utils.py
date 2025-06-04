@@ -41,7 +41,7 @@ def rollout_trajectory(model, env, max_steps=1000, device="cpu", seed=None):
             # divide std by 3 to get a narrower/taller normal distr.
             # (make model take actions closer to mean)
             # TODO: change this for other models / for different experiments
-            std = torch.clamp(std * 1.25, min=1e-4)
+            std = torch.clamp(std /3, min=1e-4)
             dist = Independent(Normal(mu, std), 1)
             # sample action and clip it to stay in the bounds of the env action space
             action = dist.sample()[0, 0].cpu().numpy()
@@ -158,6 +158,10 @@ def display_videos(frames_left, frames_right, label_left="Model 1", label_right=
                 elif event.key == pygame.K_2:
                     pygame.quit()
                     return 2
+                elif event.key == pygame.K_r:
+                    # Reset playback
+                    frame_idx = 0
+                    done_playing = False
 
         if last_frame_only:
             screen.blit(frame_left, (0, 0))
@@ -179,5 +183,5 @@ def display_videos(frames_left, frames_right, label_left="Model 1", label_right=
                 clock.tick(fps)
                 frame_idx += 1
             elif not done_playing:
-                print("Press 1 (left) or 2 (right) to indicate which trajectory you prefer.")
+                print("Press 1 (left) or 2 (right) to indicate which trajectory you prefer, or 'r' to replay")
                 done_playing = True

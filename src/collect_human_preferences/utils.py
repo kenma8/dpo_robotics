@@ -34,14 +34,17 @@ def rollout_trajectory(model, env, max_steps=1000, device="cpu", seed=None):
     for _ in range(max_steps):
         observations.append(obs)
 
-        obs_tensor = torch.from_numpy(obs[None, None]).float().to(device)
+        # Convert observation to tensor, ensuring it's a numpy array first
+        obs_array = np.array(obs, dtype=np.float32)
+        obs_tensor = torch.from_numpy(obs_array[None, None]).to(device)
+        
         with torch.no_grad():
             # get model output
             mu, std, hidden = model(obs_tensor, hidden)
             # divide std by 3 to get a narrower/taller normal distr.
             # (make model take actions closer to mean)
             # TODO: change this for other models / for different experiments
-            std = torch.clamp(std *1.25, min=1e-4)
+            std = torch.clamp(std / 3, min=1e-4)
             dist = Independent(Normal(mu, std), 1)
             # sample action and clip it to stay in the bounds of the env action space
             action = dist.sample()[0, 0].cpu().numpy()

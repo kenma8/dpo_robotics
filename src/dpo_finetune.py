@@ -8,6 +8,7 @@ import os
 import gymnasium as gym
 from torch.distributions import Normal, Independent
 from torch.nn.utils.rnn import pad_sequence
+import pathlib
 
 
 from train_humanoid_baseline import BCPolicyRNN
@@ -106,6 +107,20 @@ def main(args):
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
     
+    # Generate save path if not provided
+    if args.save_path is None:
+        # Extract dataset name from preferences path
+        pref_path = pathlib.Path(args.preferences_path)
+        dataset_name = pref_path.stem  # Get filename without extension
+        
+        # Get model directory from model path
+        model_dir = os.path.dirname(args.model_path)
+        
+        # Create save path with hyperparameters
+        save_name = f"{dataset_name}_lr{args.learning_rate:.0e}_beta{args.beta}.pth"
+        args.save_path = os.path.join(model_dir, save_name)
+        print(f"Auto-generated save path: {args.save_path}")
+    
     # Load pretrained policy
     policy = BCPolicyRNN(obs_dim, act_dim)
     policy.load_state_dict(torch.load(args.model_path, map_location=args.device))
@@ -175,8 +190,8 @@ if __name__ == "__main__":
                        help="Path to pretrained BCPolicyRNN model")
     parser.add_argument("--preferences-path", type=str, required=True,
                        help="Path to preferences dataset")
-    parser.add_argument("--save-path", type=str, required=True,
-                       help="Path to save finetuned model")
+    parser.add_argument("--save-path", type=str, default=None,
+                       help="Path to save finetuned model. If not provided, will be auto-generated based on dataset name and hyperparameters")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--num-epochs", type=int, default=100)
     parser.add_argument("--batch-size", type=int, default=32)
@@ -193,14 +208,15 @@ if __name__ == "__main__":
 """
 example:
 
-python src/dpo_finetune.py --model-path dpo_robotics/policies/bcc_rnn_humanoid_probabilistic/bc_rnn_humanoid.pth 
---preferences-path dpo_robotics/src/collect_human_preferences/preferences/humanoid_bc_vs_dpo.pkl 
---save-path dpo_robotics/policies/bcc_rnn_humanoid_probabilistic/bc_rnn_dpo_humanoid.pth 
+python src/dpo_finetune.py 
+--model-path policies/bcc_rnn_humanoid_probabilistic/bc_rnn_humanoid.pth 
+--preferences-path src/collect_human_preferences/preferences/humanoid_bc_vs_dpo.pkl 
 --device cpu 
 --num-epochs 10 
 --eval-interval 1 
 --learning-rate 5e-6 
 --beta 0.05
 
-
+# The save path will be auto-generated as:
+# policies/bcc_rnn_humanoid_probabilistic/humanoid_bc_vs_dpo_lr5e-6_beta0.05.pth
 """

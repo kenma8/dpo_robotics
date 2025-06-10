@@ -6,6 +6,8 @@ from tqdm import tqdm
 import gymnasium as gym
 from torch.distributions import Normal, Independent
 from torch.nn.utils.rnn import pad_sequence
+import os
+import pathlib
 from collect_human_preferences.preferences_dataset import PreferencesDataset
 
 from train_pusher_baseline import BCPolicyMLP
@@ -102,12 +104,9 @@ def evaluate_policy(policy, env, device, num_episodes=1000):
     return np.mean(returns)
 
 
-def load_preferences():
-    return PreferencesDataset(
-        "/Users/21stewartp/Desktop/StanfordWork/CS224R/FinalProject/dpo_robotics/src/collect_human_preferences/preferences/pusher_bc_vs_dpo_kenneth.pkl",
-        "/Users/21stewartp/Desktop/StanfordWork/CS224R/FinalProject/dpo_robotics/src/collect_human_preferences/preferences/pusher_same_start.pkl",
-        "/Users/21stewartp/Desktop/StanfordWork/CS224R/FinalProject/dpo_robotics/src/collect_human_preferences/preferences/pusher_same_start_thomas.pkl"
-    )
+def load_preferences(preferences_paths):
+    """Load and combine multiple preference datasets"""
+    return PreferencesDataset(*preferences_paths)
 
 
 def main(args):
@@ -116,6 +115,22 @@ def main(args):
     obs_dim = env.observation_space.shape[0]
     act_dim = env.action_space.shape[0]
 
+    # Generate save path if not provided
+    if args.save_path is None:
+        # Extract dataset names from preferences paths
+        dataset_names = []
+        for pref_path in args.preferences_paths:
+            dataset_names.append(pathlib.Path(pref_path).stem)
+        dataset_name = "_".join(dataset_names)
+        
+        # Get model directory from model path
+        model_dir = os.path.dirname(args.model_path)
+        
+        # Create save path with hyperparameters
+        save_name = f"{dataset_name}_lr{args.learning_rate:.0e}_beta{args.beta}.pth"
+        args.save_path = os.path.join(model_dir, save_name)
+        print(f"Auto-generated save path: {args.save_path}")
+
     # Load pretrained policy
     policy = BCPolicyMLP(obs_dim, act_dim)
     policy.load_state_dict(torch.load(args.model_path, map_location=torch.device(args.device)))
@@ -123,7 +138,7 @@ def main(args):
     policy.train()
 
     # Load preferences dataset
-    preferences = load_preferences()
+    preferences = load_preferences(args.preferences_paths)
     num_prefs = len(preferences)
     print(f"Loaded {num_prefs} preferences")
 
@@ -173,7 +188,7 @@ def main(args):
 
             if mean_return > best_return:
                 best_return = mean_return
-                torch.save(policy.state_dict(), args.save_path + f"_lr:{args.learning_rate}_beta:{args.beta}")
+                torch.save(policy.state_dict(), args.save_path)
                 print(f"Saved new best model with return {mean_return:.2f}")
 
 
@@ -183,8 +198,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-path", type=str, required=True,
                         help="Path to pretrained BCPolicyMLP model")
-    parser.add_argument("--save-path", type=str, required=True,
-                        help="Path to save fine-tuned model")
+    parser.add_argument("--preferences-paths", type=str, nargs='+', required=True,
+                        help="Paths to preference datasets")
+    parser.add_argument("--save-path", type=str, default=None,
+                        help="Path to save fine-tuned model. If not provided, will be auto-generated based on dataset name and hyperparameters")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--num-epochs", type=int, default=100)
     parser.add_argument("--batch-size", type=int, default=32)
@@ -200,6 +217,19 @@ if __name__ == "__main__":
 
 
 """
-python src/dpo_finetune_pusher.py   --model-path policies/bc_mlp_pusher/bc_mlp_pusher.pth   --save-path policies/bc_mlp_pusher/bc_mlp_dpo_pusher.pth   --num-epochs 10   --batch-size 32   --learning-rate 5e-6   --beta 0.05   --eval-interval 1
+Example usage:
+python src/dpo_finetune_pusher.py \
+  --model-path policies/bc_mlp_pusher/bc_mlp_pusher.pth \
+  --preferences-paths \
+    src/collect_human_preferences/preferences/pusher_bc_vs_dpo_kenneth.pkl \
+    src/collect_human_preferences/preferences/pusher_same_start.pkl \
+    src/collect_human_preferences/preferences/pusher_same_start_thomas.pkl \
+  --num-epochs 10 \
+  --batch-size 32 \
+  --learning-rate 5e-6 \
+  --beta 0.05 \
+  --eval-interval 1
 
+# The save path will be auto-generated as:
+# policies/bc_mlp_pusher/pusher_bc_vs_dpo_kenneth_pusher_same_start_pusher_same_start_thomas_lr5e-6_beta0.05.pth
 """

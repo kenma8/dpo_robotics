@@ -28,9 +28,9 @@ class PreferencesDataset(Dataset):
         }
 
 
-import pickle
+# import pickle
 
-with open("preferences/pusher_same_start.pkl", "rb") as f:
-    preferences = pickle.load(f)
+# with open("preferences/pusher_same_start.pkl", "rb") as f:
+#     preferences = pickle.load(f)
 
-print(f"Number of preference examples: {len(preferences)}")
+# print(f"Number of preference examples: {len(preferences)}")

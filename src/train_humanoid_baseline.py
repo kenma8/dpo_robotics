@@ -114,6 +114,7 @@ def train_bc(dataset, episodes, env):
     loader = DataLoader(ds, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     print(f"Dataset observation space shape: {dataset.observation_space.shape[0]}")
     print(f"Env observation space shape: {env.observation_space.shape[0]}")
+    return
     model = BCPolicyRNN(dataset.observation_space.shape[0],
                         dataset.action_space.shape[0]).to(DEVICE)
     opt = torch.optim.Adam(model.parameters(), lr=LR)
@@ -171,7 +172,7 @@ def train_bc(dataset, episodes, env):
     print(f"Saved optimizer state_dict to {OPT_PATH}")
 
 def main():
-    dataset = minari.load_dataset("mujoco/humanoid/expert-v0")  
+    dataset = minari.load_dataset("mujoco/humanoid/expert-v0", download=True)  
     print(f"Obs space: {dataset.observation_space}, Act space: {dataset.action_space}")
     print(f"Total episodes: {dataset.total_episodes}, Total steps: {dataset.total_steps}")
 

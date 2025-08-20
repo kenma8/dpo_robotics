@@ -1,8 +1,4 @@
-# dpo_robotics
+# DPO for Fine-Tuning Low-Level Robot Actions
 
 
-## Installing d4rl
-1. Install pybullet: `conda install -c conda-forge pybullet`
-2. Install minari: `pip install "minari[all]"`
-
-
+<img width="2500" height="1666" alt="Final Poster" src="https://github.com/user-attachments/assets/d31f591e-def7-477a-80d1-d17273a928de" />
